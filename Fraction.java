@@ -382,10 +382,10 @@ public class Fraction implements Comparable<Fraction>,Cloneable {
 	public boolean equals(Object x) {
 		if (!(x instanceof Fraction))
 			return false;
-		Fraction xDec = (Fraction) x;
+		Fraction xFra = (Fraction) x;
 		if (x == this)
 			return true;
-		if (this.sign != xDec.sign || this.numerator != xDec.numerator || this.denominator != xDec.denominator )
+		if (this.sign != xFra.sign || this.numerator != xFra.numerator || this.denominator != xFra.denominator )
 			return false;
 		return true;
 	}
@@ -478,5 +478,3 @@ public class Fraction implements Comparable<Fraction>,Cloneable {
 		}
 	}
 }
-
-
