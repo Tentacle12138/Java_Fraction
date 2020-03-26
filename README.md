@@ -1,30 +1,18 @@
-# 一个实用分数类Fraction的Java实现
+﻿# 一个实用分数类Fraction的Java实现
 
-### 自言自语环节(请无视)
-
-+ 关于写这么一个玩意的初衷
-
-  > ​		这几天没法上学在家发霉，线代刚学矩阵行列式什么的，一大堆明明很简单的计算，放在一起就很难算了呢~
-  >
-  > ​		出于保护自己脆弱脑壳的想法，准备先写一个矩阵类用来算自己的作业罢(貌似和本文毫无联系)，开始写了个差不多能用的Matrix类和配套的Det类(行列式)，说白了只是个对long\[\]\[\]的封装罢了，结果很不理想，因为平常作业里还是很常会出现小数、分数之类的东西的，要是等之后再有带复数的岂不更鸡肋。但我要干脆改成double或者BigDecimal之类的也不大合适，只要出现些奇怪一点的分数，比如1/7，BigDecimal会得出0.142857...(142857循环)，淦啊，这我可看不出来是1/7哦。所以，事已至此，我已经不能回头力，干脆先写个分数类罢！(自己乖乖算不好吗)	
-  >
-  > ![](https://github.com/Tentacle12138/JavaProjects/blob/master/114514.jpg "嗯嗯嗯~啊啊啊啊啊啊啊啊啊啊啊啊！！！")
-
-+ 关于本文
-
-  > ​		本文是我人生中初次撰写的记录性文档，目的在于分享并记录自己的一些学习流程，并希望能帮到同我一样正在学习路上的新人，若要有大佬能慷慨告诉我一些改进的建议或存在的问题，那就真的赚了(大佬看我的这玩意干嘛...)
+@[TOC](目录)
 
 ### 关于本类的简要说明
 
 本Fraction类，结构和用法类似于java.math中提供的BigInteger和BigDecimal类，如果你曾使用或了解过这两个类型，那么对于本类，你同样能很快熟悉，它也远比那两个类要简单，但有以下两点主要区别：
 
-1. 本Fraction是***可变的(mutable)***，并为提升此特性的意义，对本类中所有的计算相关方法都设置了两组，从特性上可分为***产生新对象的*** 和***不产生新对象的***。例如，本类中，对于add方法，将会有名为add和addSelf两组，顾名思义，后者的计算仅在本对象内完成，过程中***完全***不会出现任何对象创建，xxxSelf的方法全为对自身改动，两组方法在使用上的区别类似于"+"运算符与"+="运算符的区别。因此，在程序的需求允许使用Self方法时，尽量的使用Self方法，理论上可以***提高效率***。
+1.本Fraction是**可变的(mutable)**，并为提升此特性的意义，对本类中所有的计算相关方法都设置了两组，从特性上可分为**产生新对象的** 和**不产生新对象的**。例如，本类中，对于add方法，将会有名为add和addSelf两组，顾名思义，后者的计算仅在本对象内完成，过程中**完全**不会出现任何对象创建，xxxSelf的方法全为对自身改动，两组方法在使用上的区别类似于"+"运算符与"+="运算符的区别。因此，在程序的需求允许使用Self方法时，尽量的使用Self方法，理论上可以**提高效率**。
 
-2. 本Fraction类基于基本的***long类型***，因此，本类对数字的大小有所限制，同时，因本类的某些方法中包含对本类储值变量的左位移，因此，本类的实际允许大小应为***long类型的一半***。
+2.本Fraction类基于基本的**long类型**，因此，本类对数字的大小有所限制，同时，因本类的某些方法中包含对本类储值变量的左位移，因此，本类的实际允许大小应为**long类型的一半**。
 
 ### 代码内容
 
-+ **成员变量**
++ #####  成员变量
 
   > 这部分其实也没什么好说的，就三部分**符号(sign)**、**分子(numerator)**、**分母(denominator)**。
   >
@@ -49,7 +37,7 @@ private long numerator;
 private long denominator;
 ```
 
-+ **构造方法**
++ #####  构造方法
 
   > 共提供了4个构造方法，分别允许以传入**分子分母**、**整数**、**字符串**的方式来创建Fraction对象，并提供一个复制用构造方法。构造方法这一部分还并**未完善**，因急于使用，并未做传入内容的合法检测，包括传入long的大小和String的详细内容。
 
@@ -83,9 +71,9 @@ public Fraction(Fraction copy) {
 }
 ```
 
-+ **计算相关方法**
++ #####  计算相关方法
 
-  > 这部分过于繁琐且重复性高，就不详细给出，**完整源码在文末有链接**，这里只列出本类所实现的方法名，具体内容就不写这里了。xxxSelf的方法也不在这写了，形式上是一样的。
+  > 这部分过于繁琐且重复性高，就不详细给出，这里只列出本类所实现的方法名，具体内容就不写这里了。xxxSelf的方法也不在这写了，形式上是一样的。
 
 ```java
 //加法
@@ -112,8 +100,7 @@ public Fraction remainder(long anotherNum);
 public Fraction sqrt()//由于是对整数开方，所以结果常会出现不准确的情况，如对1/8开方将得1/2
 //幂运算
 public Fraction power(double pow);//通过调用StrictMath.pow简单实现的幂运算，允许实数传入
-public Fraction power(long pow);//此方法内部采用快速幂，并未调用java库函数,在数据较小的情况下经测试远快于上一方法，
-				得益于分数的特性，该方法能够很方便的实现对负指数的快速幂，允许整数传入
+public Fraction power(long pow);//此方法内部采用快速幂，并未调用java库函数,在数据较小的情况下经测试远快于上一方法，得益于分数的特性，该方法能够很方便的实现对负指数的快速幂，允许整数传入
 public Fraction power(Fraction pow);//调用了power(double)
 public Fraction power(long n , long d);//调用了power(double)
 //取绝对值
@@ -124,7 +111,7 @@ public Fraction negate();
 public Fraction plus();
 ```
 
-+ **属性set/get**
++ #####  属性set/get
 
   > 这部分也没啥好说的。
 
@@ -159,23 +146,21 @@ public void setDenominator(long den) throws Exception {
 }
 ```
 
-+ **比较用方法**
++ #####  比较用方法
 
   > 本类实现了Comparable接口，并重写了Object的equals方法，此外，还准备了一个用于直接与整数比较的方法，不过好像没啥用。
 
 ```java
 @Override
 public boolean equals(Object x) {
-    if (!(x instanceof Fraction))
-        return false;
-    Fraction xDec = (Fraction) x;
-    if (x == this)
-        return true;
-    if (this.sign != xDec.sign ||
-        this.numerator != xDec.numerator ||
-        this.denominator != xDec.denominator )
-        return false;
-    return true;
+	if (!(x instanceof Fraction))
+		return false;
+	Fraction xFra = (Fraction) x;
+	if (x == this)
+		return true;
+	if (this.sign != xFra.sign || this.numerator != xFra.numerator || this.denominator != xFra.denominator )
+		return false;
+	return true;
 }
 public boolean equals(long num) {
     if (this.denominator != 1)
@@ -203,7 +188,7 @@ public int compareTo(Fraction o) {
 }
 ```
 
-+ **转型方法**
++ #####  转型方法
 
   > 共3类转型方法，可将Fraction分数对象转化为**整数(long)**、**浮点数(double)**，以及对Object的toString重写，将本对象转化为**字符串(String)**。其中化整方法包含**向上/下取整**和**四舍五入**。
 
@@ -232,49 +217,49 @@ public String toString() {
 }
 ```
 
-+ **私有工具方法**
++ #####  私有工具方法
 
   > 本类共用到两个工具方法，两个方法共同完成一个功能，分数的化简。其中包含一个求最大公约数的方法，算是本类中唯一有一些动脑筋的地方，基本原理是**更相减损**，但在其基础上有进一步优化，并且为节省内存并未采用递归，在速度上，较穷举自然是快了不知多少，不知是否还有更好的方法。
 
 ```java
-	private void simplify() throws Exception {
-		if(this.numerator == 0) {
-			this.denominator = 1;
-			this.sign = 1;
-			return;
-		}
-		if(this.denominator==0) {
-			throw new Exception("Denominator cannot be zero.");
-		}
-		this.sign = numerator<0?-1:1;
-		this.numerator = this.numerator>0?this.numerator:-this.numerator;
-		long gcd = getGDC(numerator, denominator);
-		this.numerator /= gcd;
-		this.denominator /= gcd;
+private void simplify() throws Exception {
+	if(this.numerator == 0) {
+		this.denominator = 1;
+		this.sign = 1;
+		return;
 	}
-	
-	private final long getGDC(long a, long b) {
-		if(a==0||b==0)return 1;
-		long resScale = 0;
-		for(;true;) {
-			if(a%b==0) {
-				return b<<resScale;
-			}else if(b%a==0) {
-				return a<<resScale;
-			}
-			if((a&1)==0 && (b&1)==0) {
-				a>>=1;b>>=1;resScale++;
-			}else if((a&1)==0) {
-				a>>=1;
-			}else if((b&1)==0) {
-				b>>=1;
+	if(this.denominator==0) {
+		throw new Exception("Denominator cannot be zero.");
+	}
+	this.sign = numerator<0?-1:1;
+	this.numerator = this.numerator>0?this.numerator:-this.numerator;
+	long gcd = getGDC(numerator, denominator);
+	this.numerator /= gcd;
+	this.denominator /= gcd;
+}
+
+private final long getGDC(long a, long b) {
+	if(a==0||b==0)return 1;
+	long resScale = 0;
+	for(;true;) {
+		if(a%b==0) {
+			return b<<resScale;
+		}else if(b%a==0) {
+			return a<<resScale;
+		}
+		if((a&1)==0 && (b&1)==0) {
+			a>>=1;b>>=1;resScale++;
+		}else if((a&1)==0) {
+			a>>=1;
+		}else if((b&1)==0) {
+			b>>=1;
+		}else {
+			if(a>b) {
+				a=a-b;
 			}else {
-				if(a>b) {
-					a=a-b;
-				}else {
-					b=b-a;
-				}
+				b=b-a;
 			}
 		}
 	}
+}
 ```
